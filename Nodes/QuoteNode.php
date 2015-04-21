@@ -2,6 +2,6 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class QuoteNode extends CodeNode
+class QuoteNode extends CodeNode
 {
 }

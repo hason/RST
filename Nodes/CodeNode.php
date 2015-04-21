@@ -2,7 +2,7 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class CodeNode extends BlockNode
+class CodeNode extends BlockNode
 {
     protected $language = null;
 

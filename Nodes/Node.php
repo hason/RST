@@ -20,11 +20,4 @@ abstract class Node
     {
         $this->value = $value;
     }
-
-    abstract public function render();
-
-    public function __toString()
-    {
-        return $this->render();
-    }
 }

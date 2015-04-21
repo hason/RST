@@ -2,7 +2,7 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class TitleNode extends Node
+class TitleNode extends Node
 {
     protected $level;
     protected $token;

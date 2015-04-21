@@ -2,6 +2,6 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class AnchorNode extends Node
+class AnchorNode extends Node
 {
 }

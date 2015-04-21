@@ -1,0 +1,128 @@
+{% block document %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=\"utf-8\" />
+    {% for header in node.header_nodes %}
+        {{ header }}
+    {% endfor %}
+</head>
+
+<body>
+    {{ node }}
+</body>
+</html>
+{% endblock %}
+
+{% block meta %}
+    <meta name="{{ node.key }}" content="{{ node.value }}" />
+{% endblock %}
+
+{% block quote %}
+    <blockquote>{{ node.value }}</blockquote>
+{% endblock %}
+
+{% block separator %}
+    <hr />
+{% endblock %}
+
+{% block paragraph %}
+{% if node.value|trim %}
+    <p>{{ node.value|trim }}</p>
+{% endif %}
+{% endblock %}
+
+{% block title %}
+<a id="{{ node.token }}"></a><h{{ node.level }}>{{ node.value }}</h{{ node.level }}>
+{% endblock %}
+
+{% block code %}
+    <pre><code class="{{ node.langage }}">{{ node.value }}</code></pre>
+{% endblock %}
+
+{% block anchor %}
+    <a id="{{ node.value }}"></a>
+{% endblock %}
+
+{% block image %}
+    <img src="{{ node.url }}"{% for key, value in node.options %} {{ key }}={{ value }}{% endfor %} />
+{% endblock %}
+
+{% block table %}
+<table>';
+{% for key, row in node.data %}
+    if (!$row) {
+    continue;
+    }
+<tr>
+{% for column in row %}
+    {% if node.header.key is defined %}<th>{% else %}<td>{% endif %}
+    {{ column }}
+    {% if node.header.key is defined %}</th>{% else %}</td>{% endif %}
+{% endfor %}
+</tr>
+{% endfor %}
+</table>
+{% endblock %}
+
+{% block toc %}
+    if (isset($this->options['hidden'])) {
+    return '';
+    }
+
+    $this->depth = isset($this->options['depth']) ? $this->options['depth'] : 2;
+
+    $html = '<div class="toc"><ul>';
+        foreach ($this->files as $file) {
+        $reference = $this->environment->resolve('doc', $file);
+        $reference['url'] = $this->environment->relativeUrl($reference['url']);
+        $html .= $this->renderLevel($reference['url'], $reference['titles']);
+        }
+        $html .= '</ul></div>';
+
+    return $html;
+{% endblock %}
+
+{% block toc_level %}
+{% emdblock %}
+
+{% block emphasis %}
+    <em>{{ text }}</em>
+{% endblock %}
+
+{% block strong_emphasis %}
+    <strong>{{ text }}</strong>
+{% endblock %}
+
+{% block nbsp %}
+    &nbsp;
+{% endblock %}
+
+{% block br %}
+    <br />
+{% endblock %}
+
+{% block literar %}
+    <code>{{ text }}</code>
+{% endblock %}
+
+{% block link %}
+    <a href="{{ url|e('html_attr') }}">{{ title }}</a>
+{% endblock %}
+
+{% block escape %}
+    {{ span|e('html') }}
+{% endblock %}
+
+{% block reference %}
+    {% if reference %}
+        {% set text = value.text ?: (reference.title is defined ? reference.title) %}
+        {% set url = reference.url %}
+        {% if value.anchor %}
+            {% set url = url~'#'~value.anchor %}
+        {% endif %}
+        {{ block('link') }}
+    {% else %}
+        {{ block('link', {url: '#', title: '(unresolved reference)'}) }}
+    {% endif %}
+{% endblock %}

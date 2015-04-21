@@ -4,7 +4,7 @@ namespace Gregwar\RST\Nodes;
 
 use Gregwar\RST\Environment;
 
-abstract class TocNode extends Node
+class TocNode extends Node
 {
     protected $files;
     protected $environment;

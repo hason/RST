@@ -5,7 +5,6 @@ namespace Gregwar\RST\Directives;
 use Gregwar\RST\Parser;
 use Gregwar\RST\Directive;
 
-use Gregwar\RST\Nodes\WrapperNode;
 use Gregwar\RST\Nodes\CodeNode;
 
 /**

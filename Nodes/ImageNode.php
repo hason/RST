@@ -2,7 +2,7 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class ImageNode extends Node
+class ImageNode extends Node
 {
     protected $url;
     protected $options;

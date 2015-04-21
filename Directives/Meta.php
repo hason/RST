@@ -1,11 +1,11 @@
 <?php
 
-namespace Gregwar\RST\HTML\Directives;
+namespace Gregwar\RST\Directives;
 
 use Gregwar\RST\Parser;
 use Gregwar\RST\Directive;
 
-use Gregwar\RST\HTML\Nodes\MetaNode;
+use Gregwar\RST\Nodes\MetaNode;
 
 /**
  * Add a meta information:

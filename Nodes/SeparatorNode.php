@@ -2,7 +2,7 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class SeparatorNode extends Node
+class SeparatorNode extends Node
 {
     protected $level;
 

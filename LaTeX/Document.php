@@ -13,11 +13,19 @@ class Document extends Base
     {
         $document = '';
         foreach ($this->nodes as $node) {
-            $document .= $node->render() . "\n";
+            $document .= $node->render()."\n";
         }
 
         return $document;
     }
+
+    public function isMain()
+    {
+        return count($this->getNodes(function($node) {
+            return $node instanceof LaTeXMainNode;
+        })) != 0;
+    }
+
 
     public function renderDocument()
     {

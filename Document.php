@@ -144,9 +144,4 @@ abstract class Document extends Node
     {
         $this->headerNodes[] = $node;
     }
-
-    public function __toString()
-    {
-        return $this->render();
-    }
 }

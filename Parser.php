@@ -2,6 +2,13 @@
 
 namespace Gregwar\RST;
 
+use Gregwar\RST\Nodes\CodeNode;
+use Gregwar\RST\Nodes\ParagraphNode;
+use Gregwar\RST\Nodes\QuoteNode;
+use Gregwar\RST\Nodes\SeparatorNode;
+use Gregwar\RST\Nodes\TableNode;
+use Gregwar\RST\Nodes\TitleNode;
+
 class Parser
 {
     const STATE_BEGIN = 0;
@@ -51,7 +58,7 @@ class Parser
             $kernel = new \Gregwar\RST\HTML\Kernel;
         }
         $this->kernel = $kernel;
-        
+
         $this->environment = $environment ?: $this->kernel->build('Environment');
 
         $this->initDirectives();
@@ -91,7 +98,7 @@ class Parser
             return true;
         }
 
-        // Anchor link 
+        // Anchor link
         if (preg_match('/^\.\. _(.+):$/mUsi', trim($line), $match)) {
             $anchor = $match[1];
             $this->document->addNode($this->kernel->build('Nodes\AnchorNode', $anchor));
@@ -526,17 +533,17 @@ class Parser
                 $data = implode("\n", $this->buffer);
                 $level = $this->environment->getLevel($this->specialLetter);
                 $token = $this->environment->createTitle($level);
-                $node = $this->kernel->build('Nodes\TitleNode', $this->createSpan($data), $level, $token);
+                $node = new TitleNode($this->createSpan($data), $level, $token);
                 break;
             case self::STATE_SEPARATOR:
                 $level = $this->environment->getLevel($this->specialLetter);
-                $node = $this->kernel->build('Nodes\SeparatorNode', $level);
+                $node = new SeparatorNode($level);
                 break;
             case self::STATE_CODE:
-                $node = $this->kernel->build('Nodes\CodeNode', $this->buffer);
+                $node = new CodeNode($this->buffer);
                 break;
             case self::STATE_BLOCK:
-                $node = $this->kernel->build('Nodes\QuoteNode', $this->buffer);
+                $node = new QuoteNode($this->buffer);
                 $data = $node->getValue();
                 $subParser = $this->getSubParser();
                 $document = $subParser->parse($data);
@@ -552,7 +559,7 @@ class Parser
                 break;
             case self::STATE_NORMAL:
                 $this->isCode = $this->prepareCode();
-                $node = $this->kernel->build('Nodes\ParagraphNode', $this->createSpan($this->buffer));
+                $node = new ParagraphNode($this->createSpan($this->buffer));
                 break;
             }
         }
@@ -616,7 +623,7 @@ class Parser
                     return true;
                 } else if ($parts = $this->parseTableLine($line)) {
                     $this->state = self::STATE_TABLE;
-                    $this->buffer = $this->kernel->build('Nodes\TableNode', $parts);
+                    $this->buffer = new TableNode($parts);
                 } else {
                     $this->state = self::STATE_NORMAL;
                     return false;
@@ -683,7 +690,7 @@ class Parser
                 $this->state = self::STATE_BEGIN;
             }
             break;
-        
+
         case self::STATE_COMMENT:
             $isComment = false;
 
@@ -750,7 +757,7 @@ class Parser
         // Including files
         $document = "\n$document\n";
         $document = $this->includeFiles($document);
-        
+
         // Removing UTF-8 BOM
         $bom = "\xef\xbb\xbf";
         $document = str_replace($bom, '', $document);

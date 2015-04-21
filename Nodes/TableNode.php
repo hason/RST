@@ -4,7 +4,7 @@ namespace Gregwar\RST\Nodes;
 
 use Gregwar\RST\Parser;
 
-abstract class TableNode extends Node
+class TableNode extends Node
 {
     protected $parts;
     protected $data = array();

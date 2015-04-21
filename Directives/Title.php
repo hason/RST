@@ -1,11 +1,9 @@
 <?php
 
-namespace Gregwar\RST\HTML\Directives;
+namespace Gregwar\RST\Directives;
 
-use Gregwar\RST\Parser;
 use Gregwar\RST\Directive;
-
-use Gregwar\RST\Nodes\RawNode;
+use Gregwar\RST\Parser;
 
 /**
  * Add a meta title to the document

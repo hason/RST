@@ -2,7 +2,7 @@
 
 namespace Gregwar\RST\Nodes;
 
-abstract class MetaNode extends Node
+class MetaNode extends Node
 {
     protected $key;
     protected $value;

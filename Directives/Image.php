@@ -1,11 +1,10 @@
 <?php
 
-namespace Gregwar\RST\LaTeX\Directives;
+namespace Gregwar\RST\Directives;
 
-use Gregwar\RST\Parser;
 use Gregwar\RST\Directive;
-
-use Gregwar\RST\LaTeX\Nodes\ImageNode;
+use Gregwar\RST\Nodes\ImageNode;
+use Gregwar\RST\Parser;
 
 /**
  * Renders an image, example :

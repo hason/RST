@@ -1,0 +1,141 @@
+{% block document %}
+\\documentclass[11pt]{report}
+\\usepackage[utf8]{inputenc}
+\\usepackage[T1]{fontenc}
+\\usepackage[french]{babel}
+\\usepackage{cite}
+\\usepackage{amssymb}
+\\usepackage{amsmath}
+\\usepackage{mathrsfs}
+\\usepackage{graphicx}
+\\usepackage{hyperref}
+\\usepackage{listings}
+
+{% for header in node.header_nodes %}
+    {{ header }}
+{% endfor %}
+
+\\begin{document}
+\label{".$this->environment->getUrl()."}\n";
+{{ node }}
+
+\\end{document}
+{% endblock %}
+
+{% block meta %}
+{% endblock %}
+
+{% block image %}
+    \includegraphics{ {{ node.url }} }
+{% endblock %}
+
+{% block anchor %}
+    \label{ {{ node.value }} }
+{% endblock %}
+
+{% block code %}
+    \lstset{language={{ node.language }}}
+    \begin{lstlisting}
+        {{ node.value }}
+    \end{lstlisting}
+{% endblock %}
+
+{% block quote %}
+    \begin{quotation}{{ node.value }}\end{quotation}
+{% endblock %}
+
+{% block separator %}
+    \ \
+{% endblock %}
+
+{% block title %}
+    {% set type = node.level > 1 ? 'section' : 'chapter' %}
+    {% for i in 2..node.level %}
+        {% set type = 'sub'~type %}
+    {% endfor %}
+    \{{ type }}{ {{ node.value }} }
+{% endblock %}
+
+{% block table %}
+    \begin{tabular}{|
+        {%- for i in node.cols %}
+            {{- l }}|
+        {%- endfor -%}
+    }
+    \hline
+    {% for row in node.data if row %}
+        {% for column in row %}
+            {{ column }}{% if not loop.last %} & {% endif %}
+        {% endfor %}
+        \\
+        \hline
+    {% endfor %}
+    \end{tabular}
+{% endblock %}
+
+{% block paragraph %}
+    {% if node.value|trim %}
+        {{ node.value }}
+    {% endif %}
+{% endblock %}
+
+{% block emphasis %}
+    \textit{ {{ text }} }
+{% endblock %}
+
+
+{% block strong %}
+    \textbf{ {{ text }} }
+{% endblock %}
+
+{% block nbsp %}
+~
+{% endblock %}
+
+{% block br %}
+    \\\\
+{% endblock %}
+
+{% block literal %}
+    \verb|{{ text }}|
+{% endblock %}
+
+{% block link %}
+public function link($url, $title, $refDoc = '')
+{
+if (strlen($url) && $url[0] == '#') {
+if (!$refDoc) {
+$refDoc = $this->environment->getUrl();
+}
+$url = substr($url, 1);
+$url = $url ? '#'.$url : '';
+return '\ref{'.$refDoc.$url.'}';
+} else {
+return '\href{'.$url.'}{'.$title.'}';
+}
+}
+{% endblock %}
+
+{% block escape %}
+    {{ span }}
+{% endblock %}
+
+{% block reference %}
+public function reference($reference, $value)
+{
+if ($reference) {
+$file = $reference['file'];
+$text = $value['text'] ?: (isset($reference['title']) ? $reference['title'] : '');
+$refDoc = $file;
+$url = '#';
+if ($value['anchor']) {
+$url .= $value['anchor'];
+}
+$link = $this->link($url, trim($text), $refDoc);
+} else {
+$link = $this->link('#', '(unresolved reference)');
+}
+
+return $link;
+}
+{% endblock %}
